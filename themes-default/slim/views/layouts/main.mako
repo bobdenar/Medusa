@@ -74,7 +74,7 @@
                         <%block name="content" />
                     </component>
                </div><!-- /content -->
-            <%include file="/partials/footer.mako" />
+            <app-footer></app-footer>
             <scroll-buttons></scroll-buttons>
         </div>
         <%block name="load_main_app" />
@@ -126,6 +126,7 @@
             % endif
         </script>
         <%include file="/vue-components/sub-menu.mako"/>
+        <%include file="/vue-components/app-footer.mako"/>
         <%include file="/vue-components/quality-chooser.mako"/>
         <script>
             Vue.mixin({
