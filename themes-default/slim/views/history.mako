@@ -19,18 +19,14 @@ window.app = {};
 const startVue = () => {
     window.app = new Vue({
         store,
+        router,
         el: '#vue-wrap',
-        metaInfo: {
-            title: 'History'
-        },
-        store,
         data() {
             return {
-                header: 'History',
                 limit: '${limit}'
             };
         },
-        computed: Object.assign({
+        computed: {
             layout: {
                 get() {
                     const { config } = this;
@@ -42,7 +38,7 @@ const startVue = () => {
                     $store.dispatch('setLayout', { page, layout });
                 }
             }
-        }),
+        },
         mounted() {
             const unwatch = this.$watch('layout', () => {
                 unwatch();
@@ -106,7 +102,7 @@ const startVue = () => {
 
 <div class="row">
     <div class="col-md-6">
-        <h1 class="header">{{header}}</h1>
+        <h1 class="header">{{ $route.meta.header }}</h1>
     </div> <!-- layout title -->
     <div class="col-md-6 pull-right"> <!-- Controls -->
         <div class="layout-controls pull-right">

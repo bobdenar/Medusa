@@ -1,4 +1,5 @@
 <script>
+import { mapState } from 'vuex';
 import { api } from '../api';
 import AppLink from './app-link.vue';
 import PlotInfo from './plot-info.vue';
@@ -10,9 +11,28 @@ module.exports = {
         AppLink,
         PlotInfo
     },
-    data() {
-        return {};
+    metaInfo() {
+        if (!this.show || !this.show.title) {
+            return {
+                title: 'Medusa'
+            };
+        }
+        const { title } = this.show;
+        return {
+            title,
+            titleTemplate: '%s | Medusa'
+        };
     },
+    computed: Object.assign(mapState(['shows']), {
+        show() {
+            const id = $('#series-id').val();
+            const indexer = $('#indexer-name').val();
+            const { shows } = this;
+            if (shows) {
+                return shows.find(show => show.indexer === indexer && show.id[indexer] === Number(id));
+            }
+        }
+    }),
     mounted() {
         const {
             moveSummaryBackground,
