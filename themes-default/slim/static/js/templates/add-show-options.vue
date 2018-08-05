@@ -102,6 +102,7 @@
     </div>
 </template>
 <script>
+
 module.exports = {
     name: 'add-show-options',
     data() {

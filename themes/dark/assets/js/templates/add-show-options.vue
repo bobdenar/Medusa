@@ -11,7 +11,7 @@
         </div>
 
         <!-- app.USE_SUBTITLES: -->
-        <div v-if="useSubtitles" id="use-subtitles">
+        <div v-if="config.subtitles.enabled" id="use-subtitles">
             <div class="field-pair">
                 <label for="subtitles" class="clearfix">
                     <span class="component-title">Subtitles</span>
@@ -60,7 +60,7 @@
         </div>
 
         <!-- if enable_anime_options: -->
-        <div v-if="enableAnimeOptions" class="field-pair alt">
+        <div v-if="config.default.anime" class="field-pair alt">
             <label for="anime" class="clearfix">
                 <span class="component-title">Anime</span>
                 <span class="component-desc">
