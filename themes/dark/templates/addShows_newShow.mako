@@ -224,15 +224,15 @@ window.app = new Vue({
             }
 
             this.otherShows.forEach(nextShow => formData.append('other_shows', nextShow));
-            
+
             // Because we're using te toggle-button.vue component, we don't have valid form input's for these.
             // Therefor we need to add these values manually to the form data.
-            
+
             formData.append('subtitles', subtitles ? '1' : '0');
             formData.append('anime', anime ? '1' : '0');
             formData.append('scene', scene ? '1' : '0');
             formData.append('season_folders', seasonFolder ? '1' : '0');
-            
+
             for (name of release.whitelist) {
                 formData.append('whitelist', name);
             }
@@ -244,8 +244,7 @@ window.app = new Vue({
             const statusToDesc = { 'Wanted': 3, 'Skipped': 5, 'Ignored': 7 }
             formData.set('defaultStatus', statusToDesc[formData.get('defaultStatus')]);
             formData.set('defaultStatusAfter', statusToDesc[formData.get('defaultStatusAfter')]);
-            
-            debugger;
+
             const response = await apiRoute.post('addShows/addNewShow', formData);
             const { data } = response;
             const { result, message, redirect, params } = data;
