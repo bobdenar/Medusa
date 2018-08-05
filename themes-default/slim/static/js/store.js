@@ -570,5 +570,5 @@ Vue.use(VueNativeSock, websocketUrl, {
     reconnectionAttempts: 2, // (Number) number of reconnection attempts before giving up (Infinity),
     reconnectionDelay: 1000 // (Number) how long to initially wait before attempting a new (1000)
 });
-debugger;
+
 export default store;
