@@ -330,7 +330,14 @@ const store = new Store({
             os: null,
             anonRedirect: null,
             logDir: null,
-            recentShows: []
+            recentShows: [],
+            default: {
+                status: null,
+                statusAfter: null,
+                seasonFolders: null,
+                anime: null,
+                scene: null
+            }
         },
         // Loaded show list
         // New shows can be added via
@@ -563,5 +570,5 @@ Vue.use(VueNativeSock, websocketUrl, {
     reconnectionAttempts: 2, // (Number) number of reconnection attempts before giving up (Infinity),
     reconnectionDelay: 1000 // (Number) how long to initially wait before attempting a new (1000)
 });
-
+debugger;
 export default store;
