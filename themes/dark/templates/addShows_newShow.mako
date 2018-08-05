@@ -518,7 +518,8 @@ window.app = new Vue({
                 <fieldset class="sectionwrap">
                     <legend class="legendStep">Customize options</legend>
                     <div class="stepDiv">
-                        <%include file="/inc_addShowOptions.mako"/>
+                        <!-- <include file="/inc_addShowOptions.mako"/> -->
+                        <add-show-options></add-show-options>
                     </div>
                 </fieldset>
             </form>
