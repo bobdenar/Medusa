@@ -6,7 +6,7 @@
                     <span>{{ label }}</span>
                 </label>
                 <div class="col-sm-10 content">
-                    <input type="text" :id="id" :name="id" v-model="localValue" :class="inputClass" />
+                    <input type="text" v-bind="{id, name: id}" v-model="localValue" :class="inputClass" />
                     <p v-for="(explanation, index) in explanations" :key="index">{{ explanation }}</p>
                 </div>
             </div>
