@@ -158,21 +158,6 @@ const moveStatic = () => {
         .pipe(gulp.dest(dest));
 };
 
-/**
- * Files from the source root to copy to destination.
- */
-const rootFiles = [
-    'index.html'
-];
-
-const moveRoot = () => {
-    console.log(`Moving root files to: ${buildDest}`);
-    return gulp
-        .src(rootFiles)
-        .pipe(changed(buildDest))
-        .pipe(gulp.dest(buildDest));
-};
-
 const moveImages = () => {
     const dest = `${buildDest}/assets/img`;
     return gulp
@@ -231,7 +216,7 @@ gulp.task('build', done => {
     // Whe're building the light and dark theme. For this we need to run two sequences.
     // If we need a yargs parameter name csstheme.
     setCsstheme();
-    runSequence('lint', 'css', 'cssTheme', 'img', 'static', 'root', () => {
+    runSequence('lint', 'css', 'cssTheme', 'img', 'static', () => {
         if (!PROD) {
             done();
         }
@@ -258,7 +243,7 @@ gulp.task('sync', async () => {
     // Whe're building the light and dark theme. For this we need to run two sequences.
     // If we need a yargs parameter name csstheme.
     for (const theme of Object.entries(config.cssThemes)) {
-        await syncTheme(theme, ['css', 'cssTheme', 'img', 'static', 'root']);
+        await syncTheme(theme, ['css', 'cssTheme', 'img', 'static']);
     }
 });
 
@@ -294,9 +279,3 @@ gulp.task('lint', lint);
  * Task for moving the static files to the destinations assets directory.
  */
 gulp.task('static', moveStatic);
-
-/**
- * Task for moving the files out of the root folder (index.html and package.json) to the destinations
- * root folder. These are required to let medusa read the themes metadata.
- */
-gulp.task('root', moveRoot);

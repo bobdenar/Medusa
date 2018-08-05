@@ -98,6 +98,19 @@ const webpackConfig = mode => ({
                         source: './dist/js/**',
                         destination: path.join(dest, 'assets', 'js')
                     });
+
+                    // Copy files from the source root
+                    const rootFiles = [
+                        'index.html'
+                    ];
+                    if (rootFiles.length !== 0) {
+                        const source = rootFiles.length === 1 ? rootFiles[0] : (`{${rootFiles.join(',')}}`);
+                        operations.push({
+                            source: `./${source}`,
+                            destination: dest
+                        });
+                    }
+
                     // Copy templates
                     operations.push({
                         source: './views/**/*',
