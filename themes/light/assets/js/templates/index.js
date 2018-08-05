@@ -1,5 +1,6 @@
 import AddRecommended from './add-recommended.vue';
 import AddShows from './add-shows.vue';
+import AddShowOptions from './add-show-options.vue';
 import AnidbReleaseGroupUi from './anidb-release-group-ui.vue';
 import AppHeader from './app-header.vue';
 import AppLink from './app-link.vue';
@@ -21,6 +22,7 @@ import { NotFound } from './http';
 export {
     AddRecommended,
     AddShows,
+    AddShowOptions,
     AnidbReleaseGroupUi,
     AppHeader,
     AppLink,

@@ -11,7 +11,7 @@ import axios from 'axios';
 import store from './store';
 import router from './router';
 import { apiRoute, apiv1, api, webRoot, apiKey } from './api';
-import { Asset, Backstretch, DisplayShow, PlotInfo, ShowSelector, ScrollButtons, FileBrowser, NamePattern, AppHeader, AppLink, SelectList, LanguageSelect, RootDirs } from './templates';
+import { Asset, Backstretch, AddShowOptions, DisplayShow, PlotInfo, ShowSelector, ScrollButtons, FileBrowser, NamePattern, AppHeader, AppLink, SelectList, LanguageSelect, RootDirs } from './templates';
 
 if (window) {
     // Adding libs to window so mako files can use them
@@ -49,6 +49,7 @@ if (window) {
     window.components.push(AppHeader);
     window.components.push(AppLink);
     window.components.push(Asset);
+    window.components.push(AddShowOptions);
     window.components.push(Backstretch);
     window.components.push(DisplayShow);
     window.components.push(FileBrowser);

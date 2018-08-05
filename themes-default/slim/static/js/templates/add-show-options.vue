@@ -1,119 +1,254 @@
 <template>
     <div id="add-show-options-content">
-
-        <div class="field-pair alt">
-            <label for="customQuality" class="clearfix">
-                <span class="component-title">Preferred Quality</span>
-                <span class="component-desc">
-                    <quality-chooser></quality-chooser>
-                </span>
-            </label>
-        </div>
-
-        <!-- app.USE_SUBTITLES: -->
-        <div v-if="config.subtitles.enabled" id="use-subtitles">
-            <div class="field-pair">
-                <label for="subtitles" class="clearfix">
-                    <span class="component-title">Subtitles</span>
-                    <span class="component-desc">
-                            <!-- <input type="checkbox" name="subtitles" id="subtitles" ${'checked="checked"' if app.SUBTITLES_DEFAULT else ''} />-->
-                        <p>Download subtitles for this show?</p>
-                    </span>
-                </label>
+        <fieldset class="component-group-list">
+            
+            <div class="form-group">
+                <div class="row">
+                    <label for="customQuality" class="col-sm-2 control-label">
+                        <span>Preferred Quality</span>
+                    </label>
+                    <div class="col-sm-10 content">
+                        <quality-chooser @update:quality:allowed="quality.allowed = $event" @update:quality:preferred="quality.preferred = $event"></quality-chooser>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div class="field-pair">
-            <label for="statusSelect">
-                <span class="component-title">Status for previously aired episodes</span>
-                <span class="component-desc">
-                    <select name="defaultStatus" id="statusSelect" class="form-control form-control-inline input-sm">
-                    <!-- for cur_status in [SKIPPED, WANTED, IGNORED]
-                        <option value="${cur_status}" ${'selected="selected"' if app.STATUS_DEFAULT == cur_status else ''}>${statusStrings[cur_status]}</option>
-                    -->
-                    </select>
-                </span>
-            </label>
-        </div>
-        <div class="field-pair">
-            <label for="statusSelectAfter">
-                <span class="component-title">Status for all future episodes</span>
-                <span class="component-desc">
-                    <select name="defaultStatusAfter" id="statusSelectAfter" class="form-control form-control-inline input-sm">
-                    <!-- for cur_status in [SKIPPED, WANTED, IGNORED]:
-                        <option value="${cur_status}" ${'selected="selected"' if app.STATUS_DEFAULT_AFTER == cur_status else ''}>${statusStrings[cur_status]}</option>
-                    -->
-                    </select>
-                </span>
-            </label>
-        </div>
-        <div class="field-pair alt">
-            <label for="season_folders" class="clearfix">
-                <span class="component-title">Season Folders</span>
-                <span class="component-desc">
-                    <!--
-                    <input type="checkbox" name="season_folders" id="season_folders" {'checked="checked"' if app.SEASON_FOLDERS_DEFAULT or app.NAMING_FORCE_FOLDERS else ''} {'disabled="disabled"' if app.NAMING_FORCE_FOLDERS else ''}/>
-                    -->
-                    <p>Group episodes by season folder?</p>
-                </span>
-            </label>
-        </div>
+            <!-- app.USE_SUBTITLES: -->
+            <div v-show="config.subtitles.enabled" id="use-subtitles">
+                <config-toggle-slider label="Subtitles" id="subtitles" :checked="config.subtitles.enabled" @update="selectedSubtitleEnabled = $event" 
+                    :explanations="['Download subtitles for this show?']">
+                </config-toggle-slider>
+            </div>
 
-        <!-- if enable_anime_options: -->
-        <div v-if="config.default.anime" class="field-pair alt">
-            <label for="anime" class="clearfix">
-                <span class="component-title">Anime</span>
-                <span class="component-desc">
-                    <!--
-                    <input type="checkbox" name="anime" id="anime" ${'checked="checked"' if app.ANIME_DEFAULT else ''} />
-                    -->
-                    <p>Is this show an Anime?<p>
-                </span>
-            </label>
-        </div>
+           <div class="form-group">
+                <div class="row">
+                    <label for="defaultStatus" class="col-sm-2 control-label">
+                        <span>Status for previously aired episodes</span>
+                    </label>
+                    <div class="col-sm-10 content">
+                        <select name="defaultStatus" id="defaultStatus" class="form-control form-control-inline input-sm" v-model="selectedStatus">
+                            <option v-for="option in defaultEpisodeStatusOptions" :value="option.value" :key="option.value">{{ option.text }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-        <div class="field-pair alt">
-            <label for="scene" class="clearfix">
-                <span class="component-title">Scene Numbering</span>
-                <span class="component-desc">
-                    <!-- <input type="checkbox" name="scene" id="scene" {'checked="checked"' if app.SCENE_DEFAULT else ''} /> -->
-                    <p>Is this show scene numbered?</p>
-                </span>
-            </label>
-        </div>
-        
-        <div class="field-pair alt">
-            <label for="saveDefaultsButton" class="nocheck clearfix">
-                <span class="component-title"><input class="btn-medusa btn-inline" type="button" id="saveDefaultsButton" value="Save Defaults" disabled="disabled" /></span>
-                <span class="component-desc">
-                    <p>Use current values as the defaults</p>
-                </span>
-            </label>
-        </div>
+            <div class="form-group">
+                <div class="row">
+                    <label for="defaultStatusAfter" class="col-sm-2 control-label">
+                        <span>Status for all future episodes</span>
+                    </label>
+                    <div class="col-sm-10 content">
+                        <select name="defaultStatusAfter" id="defaultStatusAfter" class="form-control form-control-inline input-sm" v-model="selectedStatusAfter">
+                            <option v-for="option in defaultEpisodeStatusOptions" :value="option.value" :key="option.value">{{ option.text }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-    <!--
-    if enable_anime_options:
-        < import medusa.black_and_white_list %>
-        <include file="/inc_blackwhitelist.mako"/>
-    else:
-            <input type="hidden" name="anime" id="anime" value="0" />
-    endif
-    -->
+            <config-toggle-slider label="Season Folders" id="season_folders" :checked="defaultConfig.seasonFolders" 
+                :explanations="['Group episodes by season folder?']" @update="selectedSeasonFolderEnabled = $event">
+            </config-toggle-slider>
+
+            <config-toggle-slider label="Anime" id="anime" :checked="defaultConfig.anime" 
+                :explanations="['Is this show an Anime?']" @update="selectedAnimeEnabled = $event">
+            </config-toggle-slider>
+
+            <div v-show="enableAnimeOptions && selectedAnimeEnabled" class="form-group">
+                <div class="row">
+                    <label for="anidbReleaseGroup" class="col-sm-2 control-label">
+                        <span>Release Groups</span>
+                    </label>
+                    <div class="col-sm-10 content">
+                        <anidb-release-group-ui class="max-width" :blacklist="release.blacklist" :whitelist="release.whitelist" 
+                            :all-groups="release.allgroups" @change="onChangeReleaseGroupsAnime">
+                        </anidb-release-group-ui>
+                    </div>
+                </div>
+            </div>
+
+            <config-toggle-slider label="Scene Numbering" id="scene" :checked="defaultConfig.scene" 
+                :explanations="['Is this show scene numbered?']" @update="selectedSceneEnabled = $event">
+            </config-toggle-slider>
+            
+            <div class="form-group">
+                <div class="row">
+                    <label for="saveDefaultsButton" class="col-sm-2 control-label">
+                        <span>Use current values as the defaults</span>
+                    </label>    
+                    <div class="col-sm-10 content">
+                        <input class="btn-medusa btn-inline" type="button" id="saveDefaultsButton" value="Save Defaults" disabled="disabled" />
+                    </div>
+                </div>
+            </div>
+        </fieldset>
     </div>
 </template>
 <script>
 
+import ConfigToggleSlider from './config-toggle-slider.vue';
+import AnidbReleaseGroupUi from './anidb-release-group-ui.vue';
+
 module.exports = {
     name: 'add-show-options',
+    components: {
+        AnidbReleaseGroupUi,
+        ConfigToggleSlider
+    },
+    props: ['selectedShow'],
     data() {
         return {
             enableAnimeOptions: true,
-            useSubtitles: false
+            useSubtitles: false,
+            defaultEpisodeStatusOptions: [
+                {text: 'Wanted', value: 'Wanted'},
+                {text: 'Skipped', value: 'Skipped'},
+                {text: 'Ignored', value: 'Ignored'}
+            ],
+            release: {
+                blacklist: [],
+                whitelist: [],
+                allgroups: []
+            },
+            show: '',
+            selectedSubtitleEnabled: false,
+            selectedStatus: '',
+            selectedStatusAfter: '',
+            selectedSeasonFolderEnabled: false,
+            selectedAnimeEnabled: false,
+            selectedSceneEnabled: false,
+            quality: {
+                allowed: [],
+                preferred: []
+            },
+            defaultOptions: null
         }
+    },
+    mounted() {
+        const { selectedShow, defaultConfig, update } = this;
+        this.show = selectedShow;
+        this.selectedStatus = defaultConfig.status;
+        this.selectedStatusAfter = defaultConfig.statusAfter;
+        this.$nextTick(() => update());
+    },
+    methods: {
+        getReleaseGroups(showName) {
+            const params = {
+                'series_name': showName
+            }
+            
+            try {
+                return apiRoute.get('home/fetch_releasegroups', { params, timeout: 20000 }).then(res => res.data);
+            } catch (error) {
+                console.warn(error);
+                return '';
+            }
+        },
+        update() {
+            const {
+                selectedSubtitleEnabled,
+                selectedStatus,
+                selectedStatusAfter,
+                selectedSeasonFolderEnabled,
+                selectedAnimeEnabled,
+                selectedSceneEnabled,
+                release,
+                quality
+            } = this;
+            
+            this.$nextTick(() => {
+                this.$emit('change', {
+                    subtitles: selectedSubtitleEnabled,
+                    status: selectedStatus,
+                    statusAfter: selectedStatusAfter,
+                    seasonFolder: selectedSeasonFolderEnabled,
+                    anime: selectedAnimeEnabled,
+                    scene: selectedSceneEnabled,
+                    release,
+                    quality
+                });
+            });
+        },
+        onChangeReleaseGroupsAnime(items) {
+            this.release.whitelist = items.filter(item => item.memberOf === 'whitelist').map(item => item.name);
+            this.release.blacklist = items.filter(item => item.memberOf === 'blacklist').map(item => item.name);
+            this.update();
+        },
     },
     computed: {
         header() {
             return this.$route.meta.header;
+        },
+        releaseGroups() {
+            if (!this.show) {
+                return;
+            }
+
+            return this.getReleaseGroups(this.show).then(result => {
+                if (result.groups) {
+                    return result.groups;
+                }
+            });
+        },
+        /**
+         * Map the vuex state config.default on defaulConfig so we can watch it.
+         */
+        defaultConfig() {
+            return this.config.default;
+        },
+        selectedShowName() {
+            if (this.selectedShow) {
+                return this.selectedShow.showName;
+            } else {
+                return '';
+            }
+        }
+    },
+    watch: {
+        selectedShowName() {
+            const { selectedShowName } = this; 
+            this.show = selectedShowName;
+            if (this.releaseGroups) {
+                this.releaseGroups.then(groups => {
+                    if (groups) {
+                        this.release.allgroups = groups;
+                    }
+                });
+            }
+        },
+        /**
+         * Whenever something changes that can impact the hight of the component, we need to update the parent formWizard.
+         * And make it resize.
+         */
+        release: {
+            handler() {
+                this.$emit('refresh');
+                this.update();
+            },
+            deep: true
+        },
+        selectedAnimeEnabled() {
+            this.$emit('refresh');
+            this.update();
+        },
+        selectedStatus() {
+            this.update();
+        },
+        selectedStatusAfter() {
+            this.update();
+        },
+        selectedSeasonFolderEnabled() {
+            this.update();
+        },
+        selectedSceneEnabled() {
+            this.update();
+        },
+        selectedShow(newValue) {
+            this.show = newValue;
+        },
+        defaultConfig(newValue, oldValue) {
+            this.selectedStatus = newValue.status;
+            this.selectedStatusAfter = newValue.statusAfter;
         }
     }
 };
