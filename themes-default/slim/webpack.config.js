@@ -1,6 +1,8 @@
+const fs = require('fs');
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
+const PostCompilePlugin = require('post-compile-webpack-plugin');
 const pkg = require('./package.json');
 
 const { config } = pkg;
@@ -59,6 +61,27 @@ const webpackConfig = mode => ({
     },
     plugins: [
         new VueLoaderPlugin(),
+        new PostCompilePlugin(() => {
+            // Executed after bundle compilation is done.
+
+            // Create each built theme's `package.json`
+            Object.values(cssThemes).forEach(theme => {
+                const { name, dest } = theme;
+                const { version, author } = pkg;
+                const themeObject = JSON.stringify({
+                    name,
+                    version,
+                    author
+                }, undefined, 2);
+                const pkgFilePath = path.join(path.normalize(dest), 'package.json');
+
+                try {
+                    fs.writeFileSync(pkgFilePath, themeObject);
+                } catch (error) {
+                    console.error(`Failed to write ${pkgFilePath}: ${error}`);
+                }
+            });
+        }),
         new FileManagerPlugin({
             onStart: {
                 delete: [
