@@ -67,10 +67,18 @@ const webpackConfig = mode => ({
             },
             onEnd: {
                 copy: Object.values(cssThemes).reduce((operations, theme) => {
+                    const { dest } = theme;
                     // Queue operations for each theme
+
+                    // Copy bundled application
                     operations.push({
                         source: './dist/js/**',
-                        destination: path.join(theme.dest, 'assets', 'js')
+                        destination: path.join(dest, 'assets', 'js')
+                    });
+                    // Copy templates
+                    operations.push({
+                        source: './views/**/*',
+                        destination: path.join(dest, 'templates')
                     });
                     return operations;
                 }, [])

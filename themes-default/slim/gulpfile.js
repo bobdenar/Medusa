@@ -146,9 +146,6 @@ const watch = () => {
         'static/js/**/*.{js,vue}',
         ...xoConfig.ignores.map(ignore => '!' + ignore)
     ]).on('change', lintFile);
-
-    // Template changes
-    gulp.watch('views/**/*.mako', ['templates']);
 };
 
 const moveStatic = () => {
@@ -156,16 +153,6 @@ const moveStatic = () => {
     return gulp
         .src(staticAssets, {
             base: 'static'
-        })
-        .pipe(changed(buildDest))
-        .pipe(gulp.dest(dest));
-};
-
-const moveTemplates = () => {
-    const dest = `${buildDest}/templates`;
-    return gulp
-        .src('./views/**/*', {
-            base: 'views'
         })
         .pipe(changed(buildDest))
         .pipe(gulp.dest(dest));
@@ -253,7 +240,7 @@ gulp.task('build', done => {
     // Whe're building the light and dark theme. For this we need to run two sequences.
     // If we need a yargs parameter name csstheme.
     setCsstheme();
-    runSequence('lint', 'css', 'cssTheme', 'img', 'static', 'templates', 'root', () => {
+    runSequence('lint', 'css', 'cssTheme', 'img', 'static', 'root', () => {
         if (!PROD) {
             done();
         }
@@ -280,7 +267,7 @@ gulp.task('sync', async () => {
     // Whe're building the light and dark theme. For this we need to run two sequences.
     // If we need a yargs parameter name csstheme.
     for (const theme of Object.entries(config.cssThemes)) {
-        await syncTheme(theme, ['css', 'cssTheme', 'img', 'static', 'templates', 'root']);
+        await syncTheme(theme, ['css', 'cssTheme', 'img', 'static', 'root']);
     }
 });
 
@@ -316,11 +303,6 @@ gulp.task('lint', lint);
  * Task for moving the static files to the destinations assets directory.
  */
 gulp.task('static', moveStatic);
-
-/**
- * Task for moving the mako views to the destinations templates directory.
- */
-gulp.task('templates', moveTemplates);
 
 /**
  * Task for moving the files out of the root folder (index.html and package.json) to the destinations
