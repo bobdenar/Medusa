@@ -59,7 +59,6 @@ const staticAssets = [
     'static/favicon.ico',
     'static/fonts/**/*',
     'static/js/**/*',
-    'static/css/**/*',
 
     // Webpacked files
     ...webpackedJsFiles.map(file => '!' + file)
@@ -135,12 +134,6 @@ const watch = () => {
         'static/images/**/*.jpg'
     ], ['img']);
 
-    // Css changes
-    gulp.watch([
-        'static/css/**/*.scss',
-        'static/css/**/*.css'
-    ], ['css']);
-
     // Js Changes
     gulp.watch([
         'static/js/**/*.{js,vue}',
@@ -175,30 +168,6 @@ const moveImages = () => {
         .pipe(gulpif(PROD, gulp.dest(dest)));
 };
 
-/**
- * Move and rename css.
- */
-const moveCss = () => {
-    const dest = `${buildDest}/assets`;
-    return gulp
-        .src(['!static/css/light.css', '!static/css/dark.css', 'static/css/**/*.css'], {
-            base: 'static'
-        })
-        .pipe(changed(dest))
-        .pipe(gulp.dest(dest));
-};
-
-/**
- * Move and rename themed css.
- */
-const moveAndRenameCss = () => {
-    const dest = `${buildDest}/assets/css`;
-    return gulp
-        .src(`static/css/${cssTheme.css}`)
-        .pipe(rename(`themed.css`))
-        .pipe(gulp.dest(dest));
-};
-
 /** Gulp tasks */
 
 /**
@@ -216,7 +185,7 @@ gulp.task('build', done => {
     // Whe're building the light and dark theme. For this we need to run two sequences.
     // If we need a yargs parameter name csstheme.
     setCsstheme();
-    runSequence('lint', 'css', 'cssTheme', 'img', 'static', () => {
+    runSequence('lint', 'img', 'static', () => {
         if (!PROD) {
             done();
         }
@@ -243,7 +212,7 @@ gulp.task('sync', async () => {
     // Whe're building the light and dark theme. For this we need to run two sequences.
     // If we need a yargs parameter name csstheme.
     for (const theme of Object.entries(config.cssThemes)) {
-        await syncTheme(theme, ['css', 'cssTheme', 'img', 'static']);
+        await syncTheme(theme, ['img', 'static']);
     }
 });
 
@@ -257,17 +226,6 @@ gulp.task('watch', ['build'], watch);
  * Should save up to 50% of total filesize.
  */
 gulp.task('img', moveImages);
-
-/**
- * Copy all css files to the destination excluding the theme files, as whe're going to rename those.
- */
-gulp.task('css', moveCss);
-
-/**
- * Copy and rename the light or dark theme files from the configuration located in the package.json.
- * For example cssThemes.light.css for the `light.css` theme.
- */
-gulp.task('cssTheme', moveAndRenameCss);
 
 /**
  * Task for linting the js files using xo.
