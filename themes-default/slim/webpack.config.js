@@ -1,8 +1,12 @@
 const fs = require('fs');
 const path = require('path');
+const glob = require('glob');
+
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 const PostCompilePlugin = require('post-compile-webpack-plugin');
+const ImageminPlugin = require('imagemin-webpack-plugin').default;
+
 const pkg = require('./package.json');
 
 const { config } = pkg;
@@ -61,6 +65,24 @@ const webpackConfig = mode => ({
     },
     plugins: [
         new VueLoaderPlugin(),
+        new ImageminPlugin({
+            disable: true, // This disables the plugin!
+            externalImages: {
+                context: 'static/images', // Important! This tells the plugin where to "base" the paths at
+                sources: glob.sync('static/images/**/*.*'),
+                destination: 'dist/img'
+            },
+            jpegtran: {
+                progressive: true
+            },
+            pngquant: {}, // Empty object to enable with default options
+            svgo: {
+                plugins: [
+                    { removeViewBox: false },
+                    { cleanupIDs: false }
+                ]
+            }
+        }),
         new PostCompilePlugin(() => {
             // Executed after bundle compilation is done.
 
@@ -85,7 +107,8 @@ const webpackConfig = mode => ({
         new FileManagerPlugin({
             onStart: {
                 delete: [
-                    './dist/js/**'
+                    './dist/js/**',
+                    './dist/img/**'
                 ]
             },
             onEnd: {
@@ -97,6 +120,12 @@ const webpackConfig = mode => ({
                     operations.push({
                         source: './dist/js/**',
                         destination: path.join(dest, 'assets', 'js')
+                    });
+
+                    // Copy minified images
+                    operations.push({
+                        source: './dist/img/**',
+                        destination: path.join(dest, 'assets', 'img')
                     });
 
                     // Copy files from the source root
