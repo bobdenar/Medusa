@@ -188,7 +188,9 @@
         </script>
         <script>
             if (!window.loadMainApp) {
-                console.debug('Loading local Vue');
+                if (window.isDevelopment) {
+                    console.debug('Loading local Vue');
+                }
                 Vue.use(Vuex);
                 Vue.use(VueRouter);
                 Vue.use(AsyncComputed);
@@ -196,7 +198,9 @@
 
                 // Load x-template components
                 window.components.forEach(component => {
-                    console.log('Registering ' + component.name);
+                    if (window.isDevelopment) {
+                        console.log('Registering ' + component.name);
+                    }
                     Vue.component(component.name, component);
                 });
 
