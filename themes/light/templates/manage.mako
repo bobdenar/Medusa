@@ -12,15 +12,8 @@ window.app = {};
 const startVue = () => {
     window.app = new Vue({
         store,
-        el: '#vue-wrap',
-        metaInfo: {
-            title: 'Mass Update'
-        },
-        data() {
-            return {
-                header: 'Mass Update'
-            };
-        }
+        router,
+        el: '#vue-wrap'
     });
 };
 </script>
@@ -34,7 +27,7 @@ const startVue = () => {
             <table style="width: 100%;" class="home-header">
                 <tr>
                     <td nowrap>
-                        <h1 class="header" style="margin: 0;">{{header}}</h1>
+                        <h1 class="header" style="margin: 0;">{{ $route.meta.header }}</h1>
                     </td>
                     <td align="right">
                         <div>

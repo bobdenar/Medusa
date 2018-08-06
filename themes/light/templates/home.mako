@@ -13,16 +13,13 @@
 window.app = {};
 window.app = new Vue({
     store,
+    router,
     el: '#vue-wrap',
-    metaInfo: {
-        title: 'Home'
-    },
-    data() {
-        return {
-            header: 'Show List'
-        };
-    },
-    computed: Object.assign({
+    computed: {
+        isRoute() {
+            const { matched } = this.$route;
+            return matched.filter(route => route.components.default !== undefined).length >= 1;
+        },
         layout: {
             get() {
                 const { config } = this;
@@ -34,7 +31,7 @@ window.app = new Vue({
                 $store.dispatch('setLayout', { page, layout });
             }
         }
-    }),
+    },
     mounted() {
         const postLoad = () => {
             // Update VueInViewport
@@ -49,6 +46,8 @@ window.app = new Vue({
 <meta data-var="max_download_count" data-content="${max_download_count}">
 </%block>
 <%block name="content">
+<router-view v-if="isRoute"></router-view>
+<div v-show="!isRoute">
 <%
     # pick a random series to show as background
     random_show = choice(app.showList) if app.showList else None
@@ -88,7 +87,7 @@ window.app = new Vue({
 
 <div class="row">
     <div class="col-md-12">
-        <h1 class="header pull-left" style="margin: 0;">{{header}}</h1>
+        <h1 class="header pull-left" style="margin: 0;">{{ $route.meta.header }}</h1>
     </div>
 </div>
 
@@ -142,5 +141,6 @@ window.app = new Vue({
         <%include file="/partials/home/${app.HOME_LAYOUT}.mako"/>
         % endif
     </div>
+</div>
 </div>
 </%block>

@@ -175,7 +175,6 @@
                 computed: Vuex.mapState(['auth', 'config'])
             });
 
-            window.routes = [];
             if ('${bool(app.DEVELOPER)}' === 'True') {
                 Vue.config.devtools = true;
                 Vue.config.performance = true;
