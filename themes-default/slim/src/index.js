@@ -7,6 +7,7 @@ import VueNativeSock from 'vue-native-websocket';
 import AsyncComputed from 'vue-async-computed';
 import ToggleButton from 'vue-js-toggle-button';
 import Snotify from 'vue-snotify';
+import domready from 'domready';
 import axios from 'axios';
 import store from './store';
 import router from './router';
@@ -62,6 +63,7 @@ if (window) {
 }
 const UTIL = {
     exec(controller, action) {
+        const { MEDUSA } = window;
         const ns = MEDUSA;
         action = (action === undefined) ? 'init' : action;
 
@@ -77,21 +79,23 @@ const UTIL = {
         }
 
         const { body } = document;
-        $('[asset]').each(function() {
-            const asset = $(this).attr('asset');
-            const series = $(this).attr('series');
-            const path = apiRoot + 'series/' + series + '/asset/' + asset + '?api_key=' + apiKey;
-            if (this.tagName.toLowerCase() === 'img') {
-                const defaultPath = $(this).attr('src');
-                if ($(this).attr('lazy') === 'on') {
-                    $(this).attr('data-original', path);
+        [...$('[asset]')].forEach(element => {
+            const asset = element.getAttribute('asset');
+            const series = element.getAttribute('series');
+            const path = webRoot + '/api/v2/series/' + series + '/asset/' + asset + '?api_key=' + apiKey;
+
+            if (element.tagName.toLowerCase() === 'img') {
+                const defaultPath = element.getAttribute('src');
+
+                if (element.getAttribute('lazy') === 'on') {
+                    element.setAttribute('data-original', path);
                 } else {
-                    $(this).attr('src', path);
+                    element.setAttribute('src', path);
                 }
-                $(this).attr('onerror', 'this.src = "' + defaultPath + '"; return false;');
+                element.setAttribute('onerror', 'this.src = "' + defaultPath + '"; return false;');
             }
-            if (this.tagName.toLowerCase() === 'a') {
-                $(this).attr('href', path);
+            if (element.tagName.toLowerCase() === 'a') {
+                element.setAttribute('href', path);
             }
         });
         const controller = body.getAttribute('data-controller');
@@ -105,25 +109,16 @@ const UTIL = {
     }
 };
 
-$.fn.extend({
-    addRemoveWarningClass(_) {
-        if (_) {
-            return $(this).removeClass('warning');
-        }
-        return $(this).addClass('warning');
-    }
-});
-
 if (!document.location.pathname.includes('/login')) {
     api.get('config/main').then(response => {
-        log.setDefaultLevel('trace');
-        $.extend(MEDUSA.config, response.data);
+        const { MEDUSA } = window;
+        // @TODO: Remove this hack
+        MEDUSA.config = Object.assign(MEDUSA.config, response.data);
+
         MEDUSA.config.themeSpinner = MEDUSA.config.themeName === 'dark' ? '-dark' : '';
         MEDUSA.config.loading = '<img src="images/loading16' + MEDUSA.config.themeSpinner + '.gif" height="16" width="16" />';
 
-        if (navigator.userAgent.indexOf('PhantomJS') === -1) {
-            $(document).ready(UTIL.init);
-        }
+        domready(UTIL.init);
 
         MEDUSA.config.indexers.indexerIdToName = indexerId => {
             if (!indexerId) {
@@ -143,7 +138,7 @@ if (!document.location.pathname.includes('/login')) {
             return MEDUSA.config.indexers.config.indexers[name];
         };
     }).catch(error => {
-        log.error(error);
+        console.debug(error);
         alert('Unable to connect to Medusa!'); // eslint-disable-line no-alert
     });
 }
