@@ -16,10 +16,6 @@ window.app = new Vue({
     router,
     el: '#vue-wrap',
     computed: {
-        isRoute() {
-            const { matched } = this.$route;
-            return matched.filter(route => route.components.default !== undefined).length >= 1;
-        },
         layout: {
             get() {
                 const { config } = this;
@@ -46,8 +42,6 @@ window.app = new Vue({
 <meta data-var="max_download_count" data-content="${max_download_count}">
 </%block>
 <%block name="content">
-<router-view v-if="isRoute"></router-view>
-<div v-show="!isRoute">
 <%
     # pick a random series to show as background
     random_show = choice(app.showList) if app.showList else None
@@ -141,6 +135,5 @@ window.app = new Vue({
         <%include file="/partials/home/${app.HOME_LAYOUT}.mako"/>
         % endif
     </div>
-</div>
 </div>
 </%block>
