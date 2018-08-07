@@ -149,8 +149,8 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.6.tgz#1640f021dd0eaf12e731e54198c12ad2e020dc8e"
 
 "@vue/component-compiler-utils@^2.0.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@vue/component-compiler-utils/-/component-compiler-utils-2.1.0.tgz#8331eadc8acdbc35aace5a61d2153e6f6434bfe2"
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@vue/component-compiler-utils/-/component-compiler-utils-2.1.1.tgz#9b084cb67023076860687002a29930d30b36ef56"
   dependencies:
     consolidate "^0.15.1"
     hash-sum "^1.0.2"
@@ -9206,9 +9206,9 @@ vue-js-toggle-button@1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/vue-js-toggle-button/-/vue-js-toggle-button-1.2.3.tgz#efc3309bf500ff5f84c5a8c3bea734b932cad191"
 
-"vue-loader@https://github.com/sharkykh/vue-loader#6fe2d6a85409010c43a8474ccedf9f43633ad6ca":
+"vue-loader@git+https://github.com/sharkykh/vue-loader.git#6fe2d6a85409010c43a8474ccedf9f43633ad6ca":
   version "15.3.0"
-  resolved "https://github.com/sharkykh/vue-loader#6fe2d6a85409010c43a8474ccedf9f43633ad6ca"
+  resolved "git+https://github.com/sharkykh/vue-loader.git#6fe2d6a85409010c43a8474ccedf9f43633ad6ca"
   dependencies:
     "@vue/component-compiler-utils" "^2.0.0"
     hash-sum "^1.0.2"
@@ -9236,9 +9236,10 @@ vue-snotify@3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/vue-snotify/-/vue-snotify-3.2.1.tgz#1e093838b67ecb4141d6227b6b19175735f4e259"
 
-vue-style-loader@^4.1.0, "vue-style-loader@https://github.com/sharkykh/vue-style-loader#cb98ec35a64dd2078f6e273cd14c36f1c8ad82f7":
+vue-style-loader@^4.1.0, "vue-style-loader@git+https://github.com/sharkykh/vue-style-loader.git#cb98ec35a64dd2078f6e273cd14c36f1c8ad82f7":
   version "4.1.1"
-  resolved "https://github.com/sharkykh/vue-style-loader#cb98ec35a64dd2078f6e273cd14c36f1c8ad82f7"
+  uid cb98ec35a64dd2078f6e273cd14c36f1c8ad82f7
+  resolved "git+https://github.com/sharkykh/vue-style-loader.git#cb98ec35a64dd2078f6e273cd14c36f1c8ad82f7"
   dependencies:
     hash-sum "^1.0.2"
     loader-utils "^1.0.2"
