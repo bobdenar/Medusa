@@ -2,6 +2,7 @@ const path = require('path');
 const { ProvidePlugin } = require('webpack');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const pkg = require('./package.json');
 
 const { config } = pkg;
@@ -27,6 +28,10 @@ const webpackConfig = mode => ({
     performance: {
         hints: false
     },
+    stats: {
+        // When `false`, hides extra information about assets collected by children (e.g. plugins)
+        children: false
+    },
     optimization: {
         splitChunks: {
             chunks: 'all',
@@ -41,11 +46,7 @@ const webpackConfig = mode => ({
                     loader: 'vue-loader',
                     options: {
                         // This is a workaround because vue-loader can't get the webpack mode
-                        productionMode: mode === 'production',
-                        loaders: {
-                            css: ['vue-style-loader', { loader: 'css-loader' }],
-                            js: ['babel-loader']
-                        }
+                        productionMode: mode === 'production'
                     }
                 }]
             },
@@ -54,15 +55,32 @@ const webpackConfig = mode => ({
                 loader: 'babel-loader'
             },
             {
+                // This rule may get either actual `.css` files or the style blocks from `.vue` files.
+                // Here we delegate each request to use the appropriate loaders.
                 test: /\.css$/,
-                use: [
+                oneOf: [
                     {
-                        loader: 'style-loader',
-                        options: {
-                            insertAt: 'top'
-                        }
+                        // Handle style blocks in `.vue` files
+                        // Based on this query: https://github.com/vuejs/vue-loader/blob/v15.2.7/lib/codegen/styleInjection.js#L27
+                        resourceQuery: /^\?vue&type=style/,
+                        use: [
+                            'vue-style-loader',
+                            'css-loader'
+                        ]
                     },
-                    'css-loader'
+                    {
+                        // Handle regular `.css` files
+                        use: [
+                            {
+                                loader: MiniCssExtractPlugin.loader,
+                                options: {
+                                    // Fixes loading fonts from the fonts folder
+                                    publicPath: '../'
+                                }
+                            },
+                            'css-loader'
+                        ]
+                    }
                 ]
             },
             {
@@ -84,6 +102,9 @@ const webpackConfig = mode => ({
             jQuery: 'jquery'
         }),
         new VueLoaderPlugin(),
+        new MiniCssExtractPlugin({
+            filename: 'css/[name].css'
+        }),
         new FileManagerPlugin({
             onEnd: {
                 copy: Object.values(cssThemes).reduce((operations, theme) => {
@@ -91,6 +112,10 @@ const webpackConfig = mode => ({
                     operations.push({
                         source: './dist/js/**',
                         destination: path.join(theme.dest, 'assets', 'js')
+                    });
+                    operations.push({
+                        source: './dist/css/**',
+                        destination: path.join(theme.dest, 'assets', 'css')
                     });
                     operations.push({
                         source: './dist/fonts/**',
