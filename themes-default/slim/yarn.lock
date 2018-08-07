@@ -9206,9 +9206,9 @@ vue-js-toggle-button@1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/vue-js-toggle-button/-/vue-js-toggle-button-1.2.3.tgz#efc3309bf500ff5f84c5a8c3bea734b932cad191"
 
-vue-loader@15.2.7:
-  version "15.2.7"
-  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.2.7.tgz#c1d40dae7407c2fc2215522d3b7cef736f568051"
+"vue-loader@https://github.com/sharkykh/vue-loader#6fe2d6a85409010c43a8474ccedf9f43633ad6ca":
+  version "15.3.0"
+  resolved "https://github.com/sharkykh/vue-loader#6fe2d6a85409010c43a8474ccedf9f43633ad6ca"
   dependencies:
     "@vue/component-compiler-utils" "^2.0.0"
     hash-sum "^1.0.2"
@@ -9236,14 +9236,7 @@ vue-snotify@3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/vue-snotify/-/vue-snotify-3.2.1.tgz#1e093838b67ecb4141d6227b6b19175735f4e259"
 
-vue-style-loader@^4.1.0:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/vue-style-loader/-/vue-style-loader-4.1.1.tgz#7c1d051b24f60b1707602b549ed50b4c8111d316"
-  dependencies:
-    hash-sum "^1.0.2"
-    loader-utils "^1.0.2"
-
-"vue-style-loader@https://github.com/sharkykh/vue-style-loader#cb98ec35a64dd2078f6e273cd14c36f1c8ad82f7":
+vue-style-loader@^4.1.0, "vue-style-loader@https://github.com/sharkykh/vue-style-loader#cb98ec35a64dd2078f6e273cd14c36f1c8ad82f7":
   version "4.1.1"
   resolved "https://github.com/sharkykh/vue-style-loader#cb98ec35a64dd2078f6e273cd14c36f1c8ad82f7"
   dependencies:
