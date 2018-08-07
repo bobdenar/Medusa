@@ -9243,6 +9243,13 @@ vue-style-loader@^4.1.0:
     hash-sum "^1.0.2"
     loader-utils "^1.0.2"
 
+"vue-style-loader@https://github.com/sharkykh/vue-style-loader#cb98ec35a64dd2078f6e273cd14c36f1c8ad82f7":
+  version "4.1.1"
+  resolved "https://github.com/sharkykh/vue-style-loader#cb98ec35a64dd2078f6e273cd14c36f1c8ad82f7"
+  dependencies:
+    hash-sum "^1.0.2"
+    loader-utils "^1.0.2"
+
 vue-template-compiler@2.5.17, vue-template-compiler@^2.2.0:
   version "2.5.17"
   resolved "https://registry.yarnpkg.com/vue-template-compiler/-/vue-template-compiler-2.5.17.tgz#52a4a078c327deb937482a509ae85c06f346c3cb"

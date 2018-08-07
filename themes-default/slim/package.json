@@ -71,6 +71,7 @@
     "vue-native-websocket": "2.0.8",
     "vue-router": "3.0.1",
     "vue-snotify": "3.2.1",
+    "vue-style-loader": "https://github.com/sharkykh/vue-style-loader#cb98ec35a64dd2078f6e273cd14c36f1c8ad82f7",
     "vue-template-compiler": "2.5.17",
     "vuex": "3.0.1",
     "webpack": "4.16.5",
