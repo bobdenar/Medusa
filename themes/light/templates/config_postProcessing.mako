@@ -11,6 +11,7 @@ window.app = new Vue({
     data() {
         return {
             configLoaded: false,
+            header: 'Post Processing',
             presets: [
                 { pattern: '%SN - %Sx%0E - %EN', example: 'Show Name - 2x03 - Ep Name' },
                 { pattern: '%S.N.S%0SE%0E.%E.N', example: 'Show.Name.S02E03.Ep.Name' },
