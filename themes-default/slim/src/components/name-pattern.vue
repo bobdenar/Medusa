@@ -265,7 +265,7 @@
 
 <script>
 import $ from 'jquery';
-import { apiRoute } from '../../api';
+import { apiRoute } from '../api';
 
 module.exports = {
     name: 'name-pattern',
