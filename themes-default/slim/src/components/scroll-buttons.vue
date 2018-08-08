@@ -19,8 +19,9 @@
         </div>
     </div>
 </template>
-
 <script>
+import $ from 'jquery';
+
 module.exports = {
     name: 'scroll-buttons',
     data() {

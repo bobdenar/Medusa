@@ -1,4 +1,5 @@
 <script>
+import $ from 'jquery';
 import { api } from '../api';
 import AppLink from './app-link.vue';
 import PlotInfo from './plot-info.vue';
@@ -13,6 +14,7 @@ module.exports = {
     data() {
         return {};
     },
+    computed() {},
     mounted() {
         const {
             moveSummaryBackground,
@@ -56,6 +58,7 @@ module.exports = {
         });
 
         $(document.body).on('change', '#seasonJump', event => {
+            const element = event.currentTarget;
             const id = $('#seasonJump option:selected').val();
             if (id && id !== 'jump') {
                 const season = $('#seasonJump option:selected').data('season');
@@ -63,7 +66,7 @@ module.exports = {
                 $('#collapseSeason-' + season).collapse('show');
                 location.hash = id;
             }
-            $(event.currentTarget).val('jump');
+            element.value = 'jump';
         });
 
         $(document.body).on('click', '#changeStatus', () => {

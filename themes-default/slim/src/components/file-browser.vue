@@ -21,6 +21,8 @@
     </div>
 </template>
 <script>
+import $ from 'jquery';
+
 module.exports = {
     name: 'file-browser',
     props: {

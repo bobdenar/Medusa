@@ -1,4 +1,6 @@
 MEDUSA.home.index = function() {
+    const { api } = window;
+
     // Resets the tables sorting, needed as we only use a single call for both tables in tablesorter
     $('.resetsorting').on('click', () => {
         $('table').trigger('filterReset');

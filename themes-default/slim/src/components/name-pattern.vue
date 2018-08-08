@@ -264,6 +264,9 @@
 </template>
 
 <script>
+import $ from 'jquery';
+import { apiRoute } from '../../api';
+
 module.exports = {
     name: 'name-pattern',
     props: {

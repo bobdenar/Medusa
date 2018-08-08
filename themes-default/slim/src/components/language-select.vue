@@ -2,7 +2,9 @@
     <select/>
 </template>
 <script>
-module.exports = {
+import $ from 'jquery';
+
+export default {
     name: 'language-select',
     props: {
         language: {
